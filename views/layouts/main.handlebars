@@ -8,6 +8,60 @@
     <title>Art Collector</title>
 </head>
 <body>
+    <h1>Virtual Art Collection</h1>
+
+    {{{ body }}}
+
+    <button id="runButton">Run</button>
     
+    <script>
+        $("#runButton").on("click", getArt);
+
+        function getArt() {
+            const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
+
+            $.ajax({
+                method: "GET",
+                url: idsUrl
+            }).then(function(idResponse) {
+                const numIds = idResponse.total;
+
+                let numPieces = 0;
+                let artPieces = [];
+
+                getFour(numIds);
+
+                function getFour(numIds){
+                    const randIndex = Math.floor(Math.random()*numIds);
+                    const url = "https://collectionapi.metmuseum.org/public/collection/v1/objects/" + idResponse.objectIDs[randIndex];
+
+                    $.ajax({
+                        method: "GET",
+                        url: url
+                    }).then(function(response) {
+                        let image = "";
+                        try {
+                            image = response.primaryImageSmall;
+                        }
+                        catch (error) {
+                            //pass
+                        }
+
+                        if(image != "") {
+                            numPieces += 1;
+                            artPieces.push(response);
+                        }
+
+                        if(numPieces < 4) {
+                            console.log(numPieces);
+                            getFour(numIds);
+                        }
+                    });
+                    console.log(artPieces);
+                };
+            });
+        };
+
+    </script>
 </body>
 </html>
