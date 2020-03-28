@@ -6,6 +6,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <title>Art Collector</title>
+
+    <style>
+        .art {
+            width: 50%;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -23,39 +29,45 @@
 </div>
 
 <div class="art" id="item1">
-        <h2 id="title1"></h2>
-        <img id="image1" src="" style="width:200px;"><br>
+        <h3 id="title1"></h3>
+        <img id="image1" src="" style="width:60%;"><br>
 		<h4 id="artist1"></h4>
 		<h5 id="date1"></h5>
 		<button>Save to Gallery</button>
 </div>
 
+<br/>
+<br/>
+
 <div class="art" id="item2">
-        <h2 id="title2"></h2>
-        <img id="image2" src="" style="width:200px;"><br>
+        <h3 id="title2"></h3>
+        <img id="image2" src="" style="width:60%;"><br>
 		<h4 id="artist2"></h4>
 		<h5 id="date2"></h4>
 		<button>Save to Gallery</button>
 </div>
 
+<br/>
+<br/>
+
 <div class="art" id="item3">
-        <h2 id="title3"></h2>
-        <img id="image3" src="" style="width:200px;"><br>
+        <h3 id="title3"></h3>
+        <img id="image3" src="" style="width:60%;"><br>
 		<h4 id="artist3"></h4>
 		<h5 id="date3"></h5>
 		<button>Save to Gallery</button>
 </div>
 
+<br/>
+<br/>
+
 <div class="art" id="item4">
-        <h2 id="title4"></h2>
-        <img id="image4" src="" style="width:200px;"><br>
+        <h3 id="title4"></h2>
+        <img id="image4" src="" style="width:60%;"><br>
 		<h4 id="artist4"></h4>
 		<h5 id="date4"></h4>
 		<button>Save to Gallery</button>
 </div>
-
-<br/>
-<br/>
 
 <button id="runButton">Get Art</button>
     
@@ -103,9 +115,9 @@
                         artObject = artPieces.pieces[itemNum - 1];
 
                         $("#image" + itemNum).attr("src", artObject.primaryImageSmall);
-                        $("#title" + itemNum).attr("src", artObject.title);
-                        $("#artist" + itemNum).attr("src", artObject.artistDisplayName);
-                        $("#date" + itemNum).attr("src", artObject.objectDate);
+                        $("#title" + itemNum).text(artObject.title);
+                        $("#artist" + itemNum).text(artObject.artistDisplayName);
+                        $("#date" + itemNum).text(artObject.objectDate);
                     }
                     getFour(numIds);
                 });
