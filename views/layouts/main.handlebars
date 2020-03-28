@@ -8,60 +8,84 @@
     <title>Art Collector</title>
 </head>
 <body>
-    <h1>Virtual Art Collection</h1>
+<header>
+<div class="container">
+	<div>
+		<h1><a href="/">Met Art Collection</a></h1>
+	</div>
+</div>
+</header>
+<main>
 
-    {{{ body }}}
+</main>
+<div class="container" style="text-align:center">
+	   &copy;2019 <a href="/">Met Art Collection</a>
+</div>
 
-    <button id="runButton">Run</button>
+{{{ body }}}
+
+<button id="runButton">Get Art</button>
     
-    <script>
-        $("#runButton").on("click", getArt);
+<script>
+    $("#runButton").on("click", getArt);
 
-        function getArt() {
-            const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
+    function getArt() {
+        const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
 
-            $.ajax({
-                method: "GET",
-                url: idsUrl
-            }).then(function(idResponse) {
-                const numIds = idResponse.total;
+        //Get a list of all valid art object ids
+        $.ajax({
+            method: "GET",
+            url: idsUrl
+        }).then(function(idResponse) {
+            const numIds = idResponse.total;
 
-                let numPieces = 0;
-                let artPieces = [];
+            let artPieces = {pieces: []};
 
-                getFour(numIds);
+            getFour(numIds);
 
-                function getFour(numIds){
-                    const randIndex = Math.floor(Math.random()*numIds);
-                    const url = "https://collectionapi.metmuseum.org/public/collection/v1/objects/" + idResponse.objectIDs[randIndex];
+            function getFour(numIds){
+                const randIndex = Math.floor(Math.random()*numIds);
+                const url = "https://collectionapi.metmuseum.org/public/collection/v1/objects/" + idResponse.objectIDs[randIndex];
 
-                    $.ajax({
-                        method: "GET",
-                        url: url
-                    }).then(function(response) {
-                        let image = "";
-                        try {
-                            image = response.primaryImageSmall;
-                        }
-                        catch (error) {
-                            //pass
-                        }
+                $.ajax({
+                    method: "GET",
+                    url: url
+                }).then(function(response) {
+                    let image = "";
+                    try {
+                        image = response.primaryImageSmall;
+                    }
+                    catch (error) {
+                        //pass (primaryImageSmall does not exist)
+                    }
 
-                        if(image != "") {
-                            numPieces += 1;
-                            artPieces.push(response);
-                        }
+                    if(image != "") {
+                        artPieces.pieces.push(response);
+                    }
 
-                        if(numPieces < 4) {
-                            console.log(numPieces);
-                            getFour(numIds);
-                        }
-                    });
-                    console.log(artPieces);
-                };
-            });
-        };
+                    if(artPieces.pieces.length < 4) {
+                        getFour(numIds);
+                    }
+                    else {
+                        sendPost(artPieces);
+                    }
+                });
+            };
+        });
+    };
 
-    </script>
+    function sendPost(artPieces) {
+        //Send a POST request to "/" with artPieces as body
+        $.ajax({
+            method: "POST",
+            url: "/",
+            data: artPieces
+        }).then(function(response) {
+            //pass
+        });
+    }
+
+</script>
+
 </body>
 </html>
