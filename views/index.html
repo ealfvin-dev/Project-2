@@ -87,6 +87,22 @@
                 });
             };
         });
+        $(".save").on('click', function() {
+
+            let newPiece = {
+                picture: $("#image"),
+                title: $("#title"),
+                creator: $("#artist")
+            }
+
+            $.ajax("/api/collection1",{ //will need to make the table change with form entry
+                method: "POST",
+                data: newPiece
+            }).then(() => {
+                console.log("added art piece to table");
+            })
+        })
+
     };
     
 </script>
