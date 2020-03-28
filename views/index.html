@@ -17,17 +17,14 @@
 <header>
 <div class="container">
 	<div>
-		<h1><a href="/">Met Art Collection</a></h1>
+	<center><h1><a href="/">Met Art Collection</a></h1></center>
 	</div>
 </div>
 </header>
 <main>
 
 </main>
-<div class="container" style="text-align:center">
-	   &copy;2019 <a href="/">Met Art Collection</a>
-</div>
-
+<center>
 <div class="art" id="item1">
         <h3 id="title1"></h3>
         <img id="image1" src="" style="width:60%;"><br>
@@ -68,9 +65,12 @@
 		<h5 id="date4"></h4>
 		<button>Save to Gallery</button>
 </div>
+</center>
+<center>
 
 <button id="runButton">Get Art</button>
-    
+  
+ </center> 
 <script>
     $("#runButton").on("click", getArt);
 
@@ -124,8 +124,11 @@
             };
         });
     };
-
+    
 </script>
 
+<div class="container" style="text-align:center">
+    &copy;2019 <a href="/">Met Art Collection</a>
+</div>
 </body>
 </html>
