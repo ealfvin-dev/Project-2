@@ -8,42 +8,65 @@
     <title>Art Collector</title>
 
     <style>
-        .art {
-            width: 50%;
+        .container-full {
+            margin: 2%;
+        }
+        .galleryMenu {
+            border-right-color: black;
+            border-right-width: 1px;
+            border-right-style: solid;
         }
     </style>
 </head>
 <body>
 <header>
-<div class="container">
-	<div>
-	<center><h1><a href="/">Met Art Collection</a></h1></center>
+<div class="container-full">
+	<div class="row">
+        <div class="col-lg-2 galleryMenu">
+            <form>
+                <div class="form-group">
+                  <label>Gallery Name</label>
+                  <input class="form-control" id="galleryName">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Gallery</button>
+            </form>
+
+            <div id="userGalleries">
+
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <center><h1><a href="/">Met Art Collection</a></h1></center>
+
+            <center>
+            <div class="art" id="item">
+                <h3 id="title"></h3>
+                <img id="image" src="" style="width:60%;"><br>
+                <h4 id="artist"></h4>
+                <h5 id="date"></h5>
+                <button>Save to Gallery</button>
+            </div>
+            
+            <br/>
+            <br/>
+            
+            </center>
+            
+            <center>
+            <button id="runButton">Get Art</button>
+            </center>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
 	</div>
 </div>
 </header>
-<main>
-
-</main>
-<center>
-<div class="art" id="item">
-    <h3 id="title"></h3>
-    <img id="image" src="" style="width:60%;"><br>
-    <h4 id="artist"></h4>
-    <h5 id="date"></h5>
-    <button>Save to Gallery</button>
-</div>
-
-<br/>
-<br/>
-
-</center>
-
-<center>
-<button id="runButton">Get Art</button>
-</center> 
 
 <script>
     $("#runButton").on("click", getArt);
+
+    getArt();
 
     function getArt() {
         const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
