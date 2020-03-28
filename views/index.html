@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title>Art Collector</title>
+</head>
+<body>
+<header>
+<div class="container">
+	<div>
+		<h1><a href="/">Met Art Collection</a></h1>
+	</div>
+</div>
+</header>
+<main>
+
+</main>
+<div class="container" style="text-align:center">
+	   &copy;2019 <a href="/">Met Art Collection</a>
+</div>
+
+<div class="art" id="item1">
+		<img id="image1" src="" style="width:200px;"><br>
+		<h2 id="title1"></h2>
+		<h4 id="artist1"></h4>
+		<h5 id="date1"></h5>
+		<button>Save to Gallery</button>
+</div>
+
+<div class="art" id="item2">
+		<img id="image2" src="" style="width:200px;"><br>
+		<h2 id="title2"></h2>
+		<h4 id="artist2"></h4>
+		<h5 id="date2"></h4>
+		<button>Save to Gallery</button>
+</div>
+
+<div class="art" id="item3">
+		<img id="image3" src="" style="width:200px;"><br>
+		<h2 id="title3"></h2>
+		<h4 id="artist3"></h4>
+		<h5 id="date3"></h5>
+		<button>Save to Gallery</button>
+</div>
+
+<div class="art" id="item4">
+		<img id="image4" src="" style="width:200px;"><br>
+		<h2 id="title4"></h2>
+		<h4 id="artist4"></h4>
+		<h5 id="date4"></h4>
+		<button>Save to Gallery</button>
+</div>
+
+<button id="runButton">Get Art</button>
+    
+<script>
+    $("#runButton").on("click", getArt);
+
+    function getArt() {
+        const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
+
+        //Get a list of all valid art object ids
+        $.ajax({
+            method: "GET",
+            url: idsUrl
+        }).then(function(idResponse) {
+            const numIds = idResponse.total;
+
+            let artPieces = {pieces: []};
+
+            getFour(numIds);
+
+            function getFour(numIds){
+                if(artPieces.pieces.length === 4) {
+                    return;
+                }
+
+                const randIndex = Math.floor(Math.random()*numIds);
+                const url = "https://collectionapi.metmuseum.org/public/collection/v1/objects/" + idResponse.objectIDs[randIndex];
+
+                $.ajax({
+                    method: "GET",
+                    url: url
+                }).then(function(response) {
+                    let image = "";
+                    try {
+                        image = response.primaryImageSmall;
+                    }
+                    catch (error) {
+                        //pass (primaryImageSmall does not exist)
+                    }
+
+                    if(image != "") {
+                        artPieces.pieces.push(response);
+
+                        itemNum = artPieces.pieces.length;
+                        artObject = artPieces.pieces[itemNum - 1];
+
+                        $("#image" + itemNum).attr("src", artObject.primaryImageSmall);
+                    }
+                    getFour(numIds);
+                });
+            };
+        });
+    };
+
+</script>
+
+</body>
+</html>
