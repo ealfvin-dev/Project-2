@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 
-var db = require("../models");
+// var db = require("../models");
 
 router.get("/", function(req, res) {
     return fs.readFile(__dirname + "/../views/index.html", function(err, data) {
