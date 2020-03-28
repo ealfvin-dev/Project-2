@@ -11,17 +11,14 @@
 <header>
 <div class="container">
 	<div>
-		<h1><a href="/">Met Art Collection</a></h1>
+	<center><h1><a href="/">Met Art Collection</a></h1></center>
 	</div>
 </div>
 </header>
 <main>
 
 </main>
-<div class="container" style="text-align:center">
-	   &copy;2019 <a href="/">Met Art Collection</a>
-</div>
-
+<center>
 <div class="art" id="item1">
 		<img id="image1" src="" style="width:500px;"><br>
 		<h2 id="title1"></h2>
@@ -53,11 +50,12 @@
 		<h5 id="date4"></h4>
 		<button>Save to Gallery</button>
 </div>
+</center>
 
 </br>
-
+<center>
 <button id="runButton">Get Art</button>
-    
+</center>    
 <script>
     $("#runButton").on("click", getArt);
 
@@ -102,6 +100,9 @@
                         artObject = artPieces.pieces[itemNum - 1];
 
                         $("#image" + itemNum).attr("src", artObject.primaryImageSmall);
+                        $("#title" + itemNum).text(artObject.title);
+                        $("#artist" + itemNum).text(artObject.artistDisplayName);
+                        $("#date" + itemNum).text(artObject.objectDate);
                     }
                     getFour(numIds);
                 });
@@ -110,6 +111,10 @@
     };
 
 </script>
+<div class="container" style="text-align:center">
+    &copy;2019 <a href="/">Met Art Collection</a>
+</div>
+
 
 </body>
 </html>
