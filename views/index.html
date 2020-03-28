@@ -25,52 +25,23 @@
 
 </main>
 <center>
-<div class="art" id="item1">
-        <h3 id="title1"></h3>
-        <img id="image1" src="" style="width:60%;"><br>
-		<h4 id="artist1"></h4>
-		<h5 id="date1"></h5>
-		<button>Save to Gallery</button>
+<div class="art" id="item">
+    <h3 id="title"></h3>
+    <img id="image" src="" style="width:60%;"><br>
+    <h4 id="artist"></h4>
+    <h5 id="date"></h5>
+    <button>Save to Gallery</button>
 </div>
 
 <br/>
 <br/>
 
-<div class="art" id="item2">
-        <h3 id="title2"></h3>
-        <img id="image2" src="" style="width:60%;"><br>
-		<h4 id="artist2"></h4>
-		<h5 id="date2"></h4>
-		<button>Save to Gallery</button>
-</div>
-
-<br/>
-<br/>
-
-<div class="art" id="item3">
-        <h3 id="title3"></h3>
-        <img id="image3" src="" style="width:60%;"><br>
-		<h4 id="artist3"></h4>
-		<h5 id="date3"></h5>
-		<button>Save to Gallery</button>
-</div>
-
-<br/>
-<br/>
-
-<div class="art" id="item4">
-        <h3 id="title4"></h2>
-        <img id="image4" src="" style="width:60%;"><br>
-		<h4 id="artist4"></h4>
-		<h5 id="date4"></h4>
-		<button>Save to Gallery</button>
-</div>
 </center>
-<center>
 
+<center>
 <button id="runButton">Get Art</button>
-  
- </center> 
+</center> 
+
 <script>
     $("#runButton").on("click", getArt);
 
@@ -84,15 +55,9 @@
         }).then(function(idResponse) {
             const numIds = idResponse.total;
 
-            let artPieces = {pieces: []};
+            getItem(numIds);
 
-            getFour(numIds);
-
-            function getFour(numIds){
-                if(artPieces.pieces.length === 4) {
-                    return;
-                }
-
+            function getItem(numIds){
                 const randIndex = Math.floor(Math.random()*numIds);
                 const url = "https://collectionapi.metmuseum.org/public/collection/v1/objects/" + idResponse.objectIDs[randIndex];
 
@@ -109,17 +74,16 @@
                     }
 
                     if(image != "") {
-                        artPieces.pieces.push(response);
+                        artObject = response;
 
-                        itemNum = artPieces.pieces.length;
-                        artObject = artPieces.pieces[itemNum - 1];
+                        $("#image").attr("src", artObject.primaryImageSmall);
+                        $("#title").text(artObject.title);
+                        $("#artist").text(artObject.artistDisplayName);
+                        $("#date").text(artObject.objectDate);
 
-                        $("#image" + itemNum).attr("src", artObject.primaryImageSmall);
-                        $("#title" + itemNum).text(artObject.title);
-                        $("#artist" + itemNum).text(artObject.artistDisplayName);
-                        $("#date" + itemNum).text(artObject.objectDate);
+                        return;
                     }
-                    getFour(numIds);
+                    getItem(numIds);
                 });
             };
         });
