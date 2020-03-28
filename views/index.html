@@ -33,7 +33,7 @@
         <img id="image1" src="" style="width:60%;"><br>
 		<h4 id="artist1"></h4>
 		<h5 id="date1"></h5>
-		<button>Save to Gallery</button>
+		<button class="save">Save to Gallery</button>
 </div>
 
 <br/>
@@ -44,7 +44,7 @@
         <img id="image2" src="" style="width:60%;"><br>
 		<h4 id="artist2"></h4>
 		<h5 id="date2"></h4>
-		<button>Save to Gallery</button>
+		<button class="save">Save to Gallery</button>
 </div>
 
 <br/>
@@ -55,7 +55,7 @@
         <img id="image3" src="" style="width:60%;"><br>
 		<h4 id="artist3"></h4>
 		<h5 id="date3"></h5>
-		<button>Save to Gallery</button>
+		<button class="save">Save to Gallery</button>
 </div>
 
 <br/>
@@ -66,7 +66,7 @@
         <img id="image4" src="" style="width:60%;"><br>
 		<h4 id="artist4"></h4>
 		<h5 id="date4"></h4>
-		<button>Save to Gallery</button>
+		<button class="save">Save to Gallery</button>
 </div>
 
 <button id="runButton">Get Art</button>
@@ -123,6 +123,22 @@
                 });
             };
         });
+        $(".save").on('click', function() {
+
+            let newPiece = {
+                picture: $("#image1"),
+                title: $("#title4"),
+                creator: $("#artist4")
+            }
+
+            $.ajax("/api/collection1",{ //will need to make the table change with form entry
+                method: "POST",
+                data: newPiece
+            }).then(() => {
+                console.log("added art piece to table");
+            })
+        })
+
     };
 
 </script>
