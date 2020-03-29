@@ -30,7 +30,7 @@
     <img id="image" src="" style="width:60%;"><br>
     <h4 id="artist"></h4>
     <h5 id="date"></h5>
-    <button>Save to Gallery</button>
+    <button id="save">Save to Gallery</button>
 </div>
 
 <br/>
@@ -87,15 +87,16 @@
                 });
             };
         });
-        $(".save").on('click', function() {
-
+        $("#save").on('click', function(event) {
+            event.preventDefault();
             let newPiece = {
-                picture: $("#image"),
-                title: $("#title"),
-                creator: $("#artist")
+                picture: $("#image").attr("src"),
+                title: $("#title").text(),
+                creator: $("#artist").text(),
+                date: $("date").text()
             }
 
-            $.ajax("/api/collection1",{ //will need to make the table change with form entry
+            $.ajax("/api/collection",{ //will need to make the table change with form entry
                 method: "POST",
                 data: newPiece
             }).then(() => {
