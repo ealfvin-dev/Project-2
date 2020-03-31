@@ -11,7 +11,12 @@ app.get("/", function(req, res) {
         res.end(data);
       });  
 });
- 
+
+app.get("/api/gallery", function(req, res) {
+    db.Gallery.findAll({}).then((dbGallery)=>{
+        res.json(dbGallery);
+    });
+});
 
 app.post("/api/collection", function(req, res) {
     db.Collections.create(req.body).then(function(dbCollection) {
