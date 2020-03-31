@@ -163,7 +163,7 @@
             event.stopImmediatePropagation();
         };
     
-    function sendToGallery (event) {
+    function sendToCollection (event) {
             event.preventDefault();
             let newPiece = {
                 picture: $("#image").attr("src"),
@@ -183,7 +183,7 @@
             event.stopImmediatePropagation();
         }
         $(document).on("click", "#addGallery", saveName);
-        $(document).on('click', "#save",sendToGallery);
+        $(document).on('click', "#save",sendToCollection);
     
     </script>
 <!-- <scirpt src="./js/frontpage.js" type="text/javascript"></scirpt> -->
