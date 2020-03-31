@@ -1,137 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <title>Art Collector</title>
 
     <style>
         .container-full {
             margin: 2%;
         }
+
         .galleryMenu {
             border-right-color: black;
             border-right-width: 1px;
             border-right-style: solid;
         }
+
+        body {
+            background-color: #5cdb95;
+        }
+
+        .resultDiv {
+            border: 2px dotted rebeccapurple;
+            padding: 15px;
+            border-radius: 15px;
+        }
+        .runButton, #saveToGal {
+            background-color: white;
+            color: black;
+            border: 2px solid rebeccapurple;
+            border-radius: 10px;
+        }
+        #saveToGal {
+            width: 50%;
+        }
+
+        #saveToGal:hover {
+            background-color: rebeccapurple;
+            /* Rebecca Purple */
+            color: white;
+            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+        }
     </style>
 </head>
+
 <body>
-<header>
-<div class="container-full">
-	<div class="row">
-        <div class="col-lg-2 galleryMenu">
-            <form>
-                <div class="form-group">
-                  <label>Gallery Name</label>
-                  <input class="form-control" id="galleryName">
+    <header>
+        <div class="container-full">
+            <div class="row">
+                <div class="col-lg-2 galleryMenu">
+                    <form>
+                        <div class="form-group">
+                            <label>Gallery Name</label>
+                            <input class="form-control" id="galleryName">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Gallery</button>
+                    </form>
+
+                    <div id="userGalleries">
+
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Add Gallery</button>
-            </form>
+                <div class="col-lg-8">
+                    <center>
+                        <h1><a href="/">Met Art Collection</a></h1>
+                    </center>
 
-            <div id="userGalleries">
+                    <center>
+                        <div class="resultDiv">
+                            <div class="art" id="item">
+                                <h3 id="title"></h3>
+                                <img id="image" src="" style="width:60%;"><br>
+                                <h4 id="artist"></h4>
+                                <h5 id="date"></h5>
+                                <button id="saveToGal">Save to Gallery</button>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
 
+                    </center>
+
+                    <center>
+                        <button class="runButton" id="runButton">Get Art</button>
+                    </center>
+                </div>
+                <div class="col-lg-2">
+
+                </div>
             </div>
         </div>
-        <div class="col-lg-8">
-            <center><h1><a href="/">Met Art Collection</a></h1></center>
+    </header>
 
-            <center>
-            <div class="art" id="item">
-                <h3 id="title"></h3>
-                <img id="image" src="" style="width:60%;"><br>
-                <h4 id="artist"></h4>
-                <h5 id="date"></h5>
-                <button>Save to Gallery</button>
-            </div>
-            
-            <br/>
-            <br/>
-            
-            </center>
-            
-            <center>
-            <button id="runButton">Get Art</button>
-            </center>
-        </div>
-        <div class="col-lg-2">
+    <script>
+        $("#runButton").on("click", getArt);
 
-        </div>
-	</div>
-</div>
-</header>
+        getArt();
 
-<script>
-    $("#runButton").on("click", getArt);
+        function getArt() {
+            const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
 
-    getArt();
+            //Get a list of all valid art object ids
+            $.ajax({
+                method: "GET",
+                url: idsUrl
+            }).then(function (idResponse) {
+                const numIds = idResponse.total;
 
-    function getArt() {
-        const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
+                getItem(numIds);
 
-        //Get a list of all valid art object ids
-        $.ajax({
-            method: "GET",
-            url: idsUrl
-        }).then(function(idResponse) {
-            const numIds = idResponse.total;
+                function getItem(numIds) {
+                    const randIndex = Math.floor(Math.random() * numIds);
+                    const url = "https://collectionapi.metmuseum.org/public/collection/v1/objects/" + idResponse.objectIDs[randIndex];
 
-            getItem(numIds);
+                    $.ajax({
+                        method: "GET",
+                        url: url
+                    }).then(function (response) {
+                        let image = "";
+                        try {
+                            image = response.primaryImageSmall;
+                        }
+                        catch (error) {
+                            //pass (primaryImageSmall does not exist)
+                        }
 
-            function getItem(numIds){
-                const randIndex = Math.floor(Math.random()*numIds);
-                const url = "https://collectionapi.metmuseum.org/public/collection/v1/objects/" + idResponse.objectIDs[randIndex];
+                        if (image != "") {
+                            artObject = response;
 
-                $.ajax({
-                    method: "GET",
-                    url: url
-                }).then(function(response) {
-                    let image = "";
-                    try {
-                        image = response.primaryImageSmall;
-                    }
-                    catch (error) {
-                        //pass (primaryImageSmall does not exist)
-                    }
+                            $("#image").attr("src", artObject.primaryImageSmall);
+                            $("#title").text(artObject.title);
+                            $("#artist").text(artObject.artistDisplayName);
+                            $("#date").text(artObject.objectDate);
 
-                    if(image != "") {
-                        artObject = response;
+                            return;
+                        }
+                        getItem(numIds);
+                    });
+                };
+            });
+            $(".save").on('click', function () {
 
-                        $("#image").attr("src", artObject.primaryImageSmall);
-                        $("#title").text(artObject.title);
-                        $("#artist").text(artObject.artistDisplayName);
-                        $("#date").text(artObject.objectDate);
+                let newPiece = {
+                    picture: $("#image"),
+                    title: $("#title"),
+                    creator: $("#artist")
+                }
 
-                        return;
-                    }
-                    getItem(numIds);
-                });
-            };
-        });
-        $(".save").on('click', function() {
-
-            let newPiece = {
-                picture: $("#image"),
-                title: $("#title"),
-                creator: $("#artist")
-            }
-
-            $.ajax("/api/collection1",{ //will need to make the table change with form entry
-                method: "POST",
-                data: newPiece
-            }).then(() => {
-                console.log("added art piece to table");
+                $.ajax("/api/collection1", { //will need to make the table change with form entry
+                    method: "POST",
+                    data: newPiece
+                }).then(() => {
+                    console.log("added art piece to table");
+                })
             })
-        })
 
-    };
-    
-</script>
+        };
 
-<div class="container" style="text-align:center">
-    &copy;2019 <a href="/">Met Art Collection</a>
-</div>
+    </script>
+
+    <div class="container" style="text-align:center">
+        &copy;2019 <a href="/">Met Art Collection</a>
+    </div>
 </body>
+
 </html>
