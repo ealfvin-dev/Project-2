@@ -1,9 +1,16 @@
 module.exports = function(sequelize, DataTypes) {
-    var Collection = sequelize.define("Collection", {
+    var Collections = sequelize.define("Collections", {
         picture: DataTypes.STRING,
         title: DataTypes.STRING,
         artist: DataTypes.STRING,
-        date: DataTypes.STRING
+        date: DataTypes.STRING,
+        gallery: DataTypes.STRING
     })
-    return Collection;
+
+    Collections.associate = function(models) {
+        Collections.belongsTo(models.Gallery, {
+            foreignKey:'gallery'
+        })
+    }
+    return Collections;
 }

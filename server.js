@@ -13,9 +13,7 @@ app.use(express.json());
 
 var db = require("./models");
 // Import routes and give the server access to them.
-var routes = require("./controllers/art_controller");
-
-app.use(routes);
+require("./controllers/art_controller")(app);
 
 db.sequelize.sync({ force: true }).then(function() {
   app.listen(PORT, function() {
