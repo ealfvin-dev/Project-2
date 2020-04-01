@@ -5,11 +5,11 @@ var db = require("../models");
 module.exports = function(app) {
 
 app.get("/", function(req, res) {
-    return fs.readFile(__dirname + "/../views/index.html", function(err, data) {
+    return fs.readFile(__dirname + "/../public/index.html", function(err, data) {
         if (err) throw err;
         res.writeHead(200, { "Content-Type": "text/html" });
         res.end(data);
-      });  
+    });  
 });
 
 app.get("/api/gallery", function(req, res) {

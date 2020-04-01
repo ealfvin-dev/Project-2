@@ -1,4 +1,1 @@
-
-
-USE art_db;
-
+CREATE DATABASE art_db;
