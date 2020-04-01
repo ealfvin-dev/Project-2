@@ -70,54 +70,55 @@
 <div class="container" style="text-align:center">
     &copy;2019 <a href="/">Met Art Collection</a>
 </div>
-<script>$("#runButton").on("click", getArt);
+<script>
+    //Get and store an array of art piece ids and the total number of ids
+    const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
+
+    let numIds;
+    let ids;
+
+    $.ajax({
+        method: "GET",
+        url: idsUrl
+    }).then(function(idResponse) {
+        numIds = idResponse.total;
+        ids = idResponse.objectIDs;
        
-    getArt();
+        getArt(numIds);
+
+        $("#runButton").on("click", getArt);
+    });
     
     function getArt() {
-        console.log("getting art...")
-        const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
-    
-        //Get a list of all valid art object ids
+        const randIndex = Math.floor(Math.random()*numIds);
+        const url = "https://collectionapi.metmuseum.org/public/collection/v1/objects/" + ids[randIndex];
+
         $.ajax({
             method: "GET",
-            url: idsUrl
-        }).then(function(idResponse) {
-            const numIds = idResponse.total;
-    
-            getItem(numIds);
-    
-            function getItem(numIds){
-                const randIndex = Math.floor(Math.random()*numIds);
-                const url = "https://collectionapi.metmuseum.org/public/collection/v1/objects/" + idResponse.objectIDs[randIndex];
-    
-                $.ajax({
-                    method: "GET",
-                    url: url
-                }).then(function(response) {
-                    let image = "";
-                    try {
-                        image = response.primaryImageSmall;
-                    }
-                    catch (error) {
-                        //pass (primaryImageSmall does not exist)
-                    }
-    
-                    if(image != "") {
-                        artObject = response;
-    
-                        $("#image").attr("src", artObject.primaryImageSmall);
-                        $("#title").text(artObject.title);
-                        $("#artist").text(artObject.artistDisplayName);
-                        $("#date").text(artObject.objectDate);
-    
-                        return;
-                    }
-                    getItem(numIds);
-                });
-            };
+            url: url
+        }).then(function(response) {
+            let image = "";
+            try {
+                image = response.primaryImageSmall;
+            }
+            catch (error) {
+                //pass (primaryImageSmall does not exist)
+            }
+
+            if(image != "") {
+                artObject = response;
+
+                $("#image").attr("src", artObject.primaryImageSmall);
+                $("#title").text(artObject.title);
+                $("#artist").text(artObject.artistDisplayName);
+                $("#date").text(artObject.objectDate);
+
+                return;
+            }
+            getArt();
         });
     };
+
     function getGallery () {
         
         $.get("/api/gallery", renderGalleryList);
@@ -163,7 +164,7 @@
             event.stopImmediatePropagation();
         };
     
-    function sendToGallery (event) {
+    function sendToCollection (event) {
             event.preventDefault();
             let newPiece = {
                 picture: $("#image").attr("src"),
@@ -183,7 +184,7 @@
             event.stopImmediatePropagation();
         }
         $(document).on("click", "#addGallery", saveName);
-        $(document).on('click', "#save",sendToGallery);
+        $(document).on('click', "#save",sendToCollection);
     
     </script>
 <!-- <scirpt src="./js/frontpage.js" type="text/javascript"></scirpt> -->
