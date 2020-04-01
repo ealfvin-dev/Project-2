@@ -125,8 +125,8 @@
         });
     };
 
-    function getGallery () {
-        $.get("/api/gallery", renderGalleryList);
+    function getGalleryNames () {
+        $.get("/api/galleryNames", renderGalleryList);
     }
 
     function renderGalleryList(data) {
@@ -147,7 +147,7 @@
             galleryOption.text(data.name);
         return galleryOption;
     }
-    getGallery();
+    getGalleryNames();
 
     let gallery;
     
@@ -165,7 +165,7 @@
             data: newGal
         }).then(() => {
             console.log("added gallery name to table");
-            getGallery();
+            getGalleryNames();
         })
         //event.stopImmediatePropagation();
         };
