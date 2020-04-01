@@ -1,21 +1,33 @@
-const express = require("express");
-const router = express.Router();
-const fs = require("fs");
 
-// var db = require("../models");
 
-router.get("/", function(req, res) {
-    return fs.readFile(__dirname + "/../views/index.html", function(err, data) {
+var db = require("../models");
+
+module.exports = function(app) {
+
+app.get("/", function(req, res) {
+    return fs.readFile(__dirname + "/../public/index.html", function(err, data) {
         if (err) throw err;
         res.writeHead(200, { "Content-Type": "text/html" });
         res.end(data);
-      });  
+    });  
 });
- //will have to change collection1 to recieveing a new table
-router.post("/api/collection1", function(req, res) {
-    db.collection1.create(req.body).then(function(req, res) {
-        res.json();
-    })
-})  
 
-module.exports = router;
+app.get("/api/gallery", function(req, res) {
+    db.Gallery.findAll({}).then((dbGallery)=>{
+        res.json(dbGallery);
+    });
+});
+
+app.post("/api/collection", function(req, res) {
+    db.Collections.create(req.body).then(function(dbCollection) {
+        res.json(dbCollection);
+    });
+});
+
+
+app.post("/api/gallery", function(req, res) {
+    db.Gallery.create(req.body).then(function(dbGallery) {
+        res.json(dbGallery);
+    })
+})
+};
