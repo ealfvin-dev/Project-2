@@ -16,6 +16,12 @@
             border-right-width: 1px;
             border-right-style: solid;
         }
+        .galleryButton {
+            margin-top: 5px;
+            border-width: 1.5px;
+            border-color: green;
+            border-style: none;
+        }
     </style>
 </head>
 <body>
@@ -71,7 +77,7 @@
     &copy;2019 <a href="/">Met Art Collection</a>
 </div>
 <script>
-    //Get and store an array of art piece ids and the total number of ids
+    //Get and store an array of art object ids and the total number of ids
     const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
 
     let numIds;
@@ -120,15 +126,15 @@
     };
 
     function getGallery () {
-        
         $.get("/api/gallery", renderGalleryList);
     }
 
     function renderGalleryList(data) {
          let rowsToAdd = [];
          for (let i = 0; i < data.length; i++){
-         rowsToAdd.push(createGalleryRow(data[i]));
+            rowsToAdd.push(createGalleryRow(data[i]));
          }
+
          $("#gallery-list").empty();
          $("#gallery-list").prepend(rowsToAdd);
          console.log("getting rows")
@@ -136,8 +142,8 @@
 
     function createGalleryRow(data) {
         var galleryOption = $("<button>");
-            galleryOption.attr({"class": "list-group-item list-group-item-action",
-                                "type": "button"});
+            galleryOption.attr({"class": "galleryButton btn btn-group btn-light",
+                                "type": "button", "aria-disabled": "true", "data-isActive": "false"});
             galleryOption.text(data.name);
         return galleryOption;
     }
@@ -147,46 +153,56 @@
     
     function saveName(event) {
         event.preventDefault();
-            gallery = $('#galleryName').val();
-            console.log(gallery)
+        gallery = $('#galleryName').val();
+        console.log(gallery)
 
-            let newGal = {
-                name: gallery
-            };
+        let newGal = {
+            name: gallery
+        };
 
-            $.ajax("/api/gallery",{ 
-                method: "POST",
-                data: newGal
-            }).then(() => {
-                console.log("added gallery name to table");
-                getGallery();
-            })
-            event.stopImmediatePropagation();
+        $.ajax("/api/gallery",{ 
+            method: "POST",
+            data: newGal
+        }).then(() => {
+            console.log("added gallery name to table");
+            getGallery();
+        })
+        //event.stopImmediatePropagation();
         };
     
     function sendToCollection (event) {
-            event.preventDefault();
-            let newPiece = {
-                picture: $("#image").attr("src"),
-                title: $("#title").text(),
-                artist: $("#artist").text(),
-                date: $("#date").text(),
-                gallery: gallery
-            }
-    
-            $.ajax("/api/collection",{ 
-                method: "POST",
-                data: newPiece
-            }).then(() => {
-                console.log("added art piece to table");
-                
-            })
-            event.stopImmediatePropagation();
+        event.preventDefault();
+        let newPiece = {
+            picture: $("#image").attr("src"),
+            title: $("#title").text(),
+            artist: $("#artist").text(),
+            date: $("#date").text(),
+            gallery: gallery
         }
-        $(document).on("click", "#addGallery", saveName);
-        $(document).on('click', "#save",sendToCollection);
+
+        $.ajax("/api/collection",{ 
+            method: "POST",
+            data: newPiece
+        }).then(() => {
+            console.log("added art piece to table");
+            
+        })
+        //event.stopImmediatePropagation();
+    }
+
+    function renderGalleryButtons() {
+        $(".galleryButton").css("border-style", "none");
+        $(".galleryButton").attr("data-isActive", "false");
+
+        $(this).css("border-style", "solid");
+        $(this).attr("data-isActive", "true");
+    }
+
+    $(document).on("click", "#addGallery", saveName);
+    $(document).on('click', "#save", sendToCollection);
+    $(document).on('click', ".galleryButton", renderGalleryButtons);
     
-    </script>
+</script>
 <!-- <scirpt src="./js/frontpage.js" type="text/javascript"></scirpt> -->
 </body>
 </html>
