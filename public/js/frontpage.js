@@ -46,14 +46,14 @@ function getArt() {
     });
 };
 
-function getGallery () {
+function getGalleries () {
     $.get("/api/gallery", renderGalleryList);
 }
 
 function renderGalleryList(data) {
         let rowsToAdd = [];
         for (let i = 0; i < data.length; i++){
-        rowsToAdd.push(createGalleryRow(data[i]));
+            rowsToAdd.push(createGalleryRow(data[i]));
         }
 
         $("#gallery-list").empty();
@@ -62,18 +62,10 @@ function renderGalleryList(data) {
 }
 
 function createGalleryRow(data) {
-    var galleryOption = $("<a>");
-        galleryOption.attr({"class": "btn list-group-item list-group-item-action",
-                            "type": "button",
-                            "href": `/collection?${data.name}`});
+    var galleryOption = $("<button>");
+        galleryOption.attr({"class": "galleryButton btn btn-group btn-light",
+                            "type": "button", "data-isActive": "false"});
         galleryOption.text(data.name);
-
-    var activeCheck = $("<input>");
-        activeCheck.attr({"type": "checkbox",
-                            "class": "activeCheck",
-                            "name": "checkbox"});
-
-        galleryOption.append(activeCheck);
     return galleryOption;
 }
 
@@ -91,9 +83,9 @@ function saveName(event) {
             data: newGal
         }).then(() => {
             console.log("added gallery name to table");
-            getGallery();
-        })
-        event.stopImmediatePropagation();
+            getGalleries();
+        });
+        //event.stopImmediatePropagation();
     };
 
 function sendToCollection (event) {
@@ -111,20 +103,28 @@ function sendToCollection (event) {
         data: newPiece
     }).then(() => {
         console.log("added art piece to table");
-        
-    })
-    event.stopImmediatePropagation();
+        getArt();
+    });
+    //event.stopImmediatePropagation();
 }
 
-getGallery();
+function renderGalleryButtons() {
+    $(".galleryButton").css("border-style", "none");
+    $(".galleryButton").attr("data-isActive", "false");
 
-$(".activeCheck").change(function(){
-    console.log("listening")
-    if($(".activeCheck").is(":checked")){
-        gallery = $(this).text();
-    }
-    console.log("jkdjfldsjl");
-});
+    $(this).css("border-style", "solid");
+    $(this).attr("data-isActive", "true");
+
+    gallery = $(this).text();
+}
+
+function viewGalleries() {
+    window.location.href = "/collection";
+}
 
 $(document).on("click", "#addGallery", saveName);
-$(document).on('click', "#save",sendToCollection);
+$(document).on('click', "#save", sendToCollection);
+$(document).on('click', ".galleryButton", renderGalleryButtons);
+$(document).on("click", "#viewGalleriesButton", viewGalleries);
+
+getGalleries();

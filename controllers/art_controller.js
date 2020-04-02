@@ -10,29 +10,6 @@ module.exports = function(app) {
             res.writeHead(200, { "Content-Type": "text/html" });
             res.end(data);
         });  
-<<<<<<< HEAD
-    });
-
-    app.get("/api/galleryNames", function(req, res) {
-        db.Gallery.findAll({}).then((dbGallery)=>{
-            res.json(dbGallery);
-        });
-    });
-
-    app.get("/galleries/:galleryName", function(req, res) {
-        db.Collections.findAll({
-            where: {
-                gallery: req.params.galleryName
-            }
-        }).then(function(results) {
-            res.json(results);
-        });
-    });
-
-    app.post("/api/collection", function(req, res) {
-        db.Collections.create(req.body).then(function(dbCollection) {
-            res.json(dbCollection);
-=======
     });
 
     app.get("/collection", function(req, res) {
@@ -58,7 +35,6 @@ module.exports = function(app) {
     app.get("/api/gallery", function(req, res) {
         db.Gallery.findAll({}).then((dbGallery)=>{
             res.json(dbGallery);
->>>>>>> Erik-branch
         });
     });
 
@@ -66,9 +42,6 @@ module.exports = function(app) {
         db.Gallery.create(req.body).then(function(dbGallery) {
             res.json(dbGallery);
         })
-<<<<<<< HEAD
-    });
-=======
     })
 
     app.post("/api/collection", function(req, res) {
@@ -77,5 +50,4 @@ module.exports = function(app) {
         });
     });
 
->>>>>>> Erik-branch
 };
