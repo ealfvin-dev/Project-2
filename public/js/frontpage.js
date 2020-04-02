@@ -1,134 +1,139 @@
 $(document).ready(function() {
-const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
+    const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
 
-let numIds;
-let ids;
-let gallery;
-
-$.ajax({
-    method: "GET",
-    url: idsUrl
-}).then(function(idResponse) {
-    numIds = idResponse.total;
-    ids = idResponse.objectIDs;
-    
-    getArt(numIds);
-
-    $("#runButton").on("click", getArt);
-});
-
-function getArt() {
-    const randIndex = Math.floor(Math.random()*numIds);
-    const url = "https://collectionapi.metmuseum.org/public/collection/v1/objects/" + ids[randIndex];
+    let numIds;
+    let ids;
+    let gallery = null;
 
     $.ajax({
         method: "GET",
-        url: url
-    }).then(function(response) {
-        let image = "";
-        try {
-            image = response.primaryImageSmall;
-        }
-        catch (error) {
-            //pass (primaryImageSmall does not exist)
-        }
-
-        if(image != "") {
-            artObject = response;
-
-            $("#image").attr("src", artObject.primaryImageSmall);
-            $("#title").text(artObject.title);
-            $("#artist").text(artObject.artistDisplayName);
-            $("#date").text(artObject.objectDate);
-
-            return;
-        }
+        url: idsUrl
+    }).then(function(idResponse) {
+        numIds = idResponse.total;
+        ids = idResponse.objectIDs;
+        
         getArt();
+
+        $("#runButton").on("click", getArt);
     });
-    $("#saveAlert").css({"visibility": "hidden"});
-};
 
-function getGalleries () {
-    $.get("/api/gallery", renderGalleryList);
-}
+    function getArt() {
+        const randIndex = Math.floor(Math.random()*numIds);
+        const url = "https://collectionapi.metmuseum.org/public/collection/v1/objects/" + ids[randIndex];
 
-function renderGalleryList(data) {
-        let rowsToAdd = [];
-        for (let i = 0; i < data.length; i++){
-            rowsToAdd.push(createGalleryRow(data[i]));
-        }
+        $.ajax({
+            method: "GET",
+            url: url
+        }).then(function(response) {
 
-        $("#gallery-list").empty();
-        $("#gallery-list").prepend(rowsToAdd);
-        console.log("getting rows")
-}
+            let image = "";
+            try {
+                image = response.primaryImageSmall;
+            }
+            catch (error) {
+                //pass (primaryImageSmall does not exist)
+            }
 
-function createGalleryRow(data) {
-    var galleryOption = $("<button>");
-        galleryOption.attr({"class": "galleryButton btn btn-group btn-light",
-                            "type": "button", "data-isActive": "false"});
-        galleryOption.text(data.name);
-    return galleryOption;
-}
+            if(image != "") {
+                $("#saveAlert").text("");
+                
+                artObject = response;
 
-function saveName(event) {
-    event.preventDefault();
-        gallery = $('#galleryName').val();
-        console.log(gallery)
+                $("#image").attr("src", artObject.primaryImageSmall);
+                $("#title").text(artObject.title);
+                $("#artist").text(artObject.artistDisplayName);
+                $("#date").text(artObject.objectDate);
 
-        let newGal = {
-            name: gallery
-        };
-
-        $.ajax("/api/gallery",{ 
-            method: "POST",
-            data: newGal
-        }).then(() => {
-            console.log("added gallery name to table");
-            getGalleries();
+                return;
+            }
+            getArt();
         });
-        //event.stopImmediatePropagation();
     };
 
-function sendToCollection (event) {
-    event.preventDefault();
-    let newPiece = {
-        picture: $("#image").attr("src"),
-        title: $("#title").text(),
-        artist: $("#artist").text(),
-        date: $("#date").text(),
-        gallery: gallery
+    function getGalleries () {
+        $.get("/api/gallery", renderGalleryList);
     }
 
-    $.ajax("/api/collection",{ 
-        method: "POST",
-        data: newPiece
-    }).then(() => {
-        console.log("added art piece to table");
-        
-    });
-    $("#saveAlert").css({"visibility": "visible"});
-    //event.stopImmediatePropagation();
-}
+    function renderGalleryList(data) {
+            let rowsToAdd = [];
+            for (let i = 0; i < data.length; i++){
+                rowsToAdd.push(createGalleryRow(data[i]));
+            }
 
-function renderGalleryButtons() {
-    $(".galleryButton").css("border-style", "none");
-    $(".galleryButton").attr("data-isActive", "false");
+            $("#gallery-list").empty();
+            $("#gallery-list").prepend(rowsToAdd);
+            console.log("getting rows")
+    }
 
-    $(this).css("border-style", "solid");
-    $(this).attr("data-isActive", "true");
+    function createGalleryRow(data) {
+        var galleryOption = $("<button>");
+            galleryOption.attr({"class": "galleryButton btn btn-group btn-light",
+                                "type": "button", "data-isActive": "false"});
+            galleryOption.text(data.name);
+        return galleryOption;
+    }
 
-    gallery = $(this).text();
-}
+    function saveName(event) {
+        event.preventDefault();
+            let newGal = {
+                name: $('#galleryName').val()
+            };
 
-function viewGalleries() {
-    window.location.href = "/collection";
-}
+            $.ajax("/api/gallery",{ 
+                method: "POST",
+                data: newGal
+            }).then(() => {
+                console.log("added gallery name to table");
+                getGalleries();
+            });
+            //event.stopImmediatePropagation();
+        };
 
-$(document).on("click", "#addGallery", saveName);
-$(document).on('click', "#save", sendToCollection);
-$(document).on('click', ".galleryButton", renderGalleryButtons);
-$(document).on("click", "#viewGalleriesButton", viewGalleries);
+    function sendToCollection (event) {
+        event.preventDefault();
 
-getGalleries();
+        if(gallery === null) {
+            $("#saveAlert").text("Please select a gallery to save to");
+            return;
+        }
+
+        let newPiece = {
+            picture: $("#image").attr("src"),
+            title: $("#title").text(),
+            artist: $("#artist").text(),
+            date: $("#date").text(),
+            gallery: gallery
+        }
+
+        $.ajax("/api/collection",{ 
+            method: "POST",
+            data: newPiece
+        }).then(() => {
+            console.log("added art piece to table"); 
+            getArt();
+        });
+        $("#saveAlert").text(`Saved to ${gallery}`);
+        //event.stopImmediatePropagation();
+    }
+
+    function renderGalleryButtons() {
+        $(".galleryButton").css("border-style", "none");
+        $(".galleryButton").attr("data-isActive", "false");
+
+        $(this).css("border-style", "solid");
+        $(this).attr("data-isActive", "true");
+
+        gallery = $(this).text();
+    }
+
+    function viewGalleries() {
+        window.location.href = "/collection";
+    }
+
+    $(document).on("click", "#addGallery", saveName);
+    $(document).on('click', "#save", sendToCollection);
+    $(document).on('click', ".galleryButton", renderGalleryButtons);
+    $(document).on("click", "#viewGalleriesButton", viewGalleries);
+
+    getGalleries();
 });
