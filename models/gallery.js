@@ -6,7 +6,7 @@ module.exports = function(sequelize, DataTypes) {
     });
 
     Gallery.associate = function(models) {
-        Gallery.hasMany(models.Gallery, {
+        Gallery.hasMany(models.Collections, {
             onDelete: "cascade"
         });
     };
