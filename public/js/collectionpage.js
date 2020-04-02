@@ -36,7 +36,7 @@ buildPage();
 
 function createArtworkDiv (data) {
     var artworkDiv = $("<div>");
-        artworkDiv.attr({"class": "card text-center"}).css("width", "40rem");
+        artworkDiv.attr({"class": "card"}).css("width", "40rem");
 
     var artworkImg = $("<img>");
         artworkImg.attr({"src": data.picture,
