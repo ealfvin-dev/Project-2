@@ -1,5 +1,4 @@
 function getGallery () {
-        
     $.get("/api/gallery", renderGalleryList);
 }
 
