@@ -1,3 +1,4 @@
+$(document).ready(function() {
 const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
 
 let numIds;
@@ -44,6 +45,7 @@ function getArt() {
         }
         getArt();
     });
+    $("#saveAlert").css({"visibility": "hidden"});
 };
 
 function getGalleries () {
@@ -103,8 +105,9 @@ function sendToCollection (event) {
         data: newPiece
     }).then(() => {
         console.log("added art piece to table");
-        getArt();
+        
     });
+    $("#saveAlert").css({"visibility": "visible"});
     //event.stopImmediatePropagation();
 }
 
@@ -128,3 +131,4 @@ $(document).on('click', ".galleryButton", renderGalleryButtons);
 $(document).on("click", "#viewGalleriesButton", viewGalleries);
 
 getGalleries();
+});

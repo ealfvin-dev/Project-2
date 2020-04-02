@@ -1,0 +1,18 @@
+.container-full {
+    margin: 2%;
+}
+
+.card {
+    margin-bottom: 20px;
+    
+}
+
+.col-lg-8 {
+    display: grid;
+    place-items: center;
+}
+
+#saveAlert {
+    visibility: hidden;
+}
+
