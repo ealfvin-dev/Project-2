@@ -1,0 +1,13 @@
+.container-full {
+    margin: 2%;
+}
+
+.card {
+    margin-bottom: 20px;
+    
+}
+
+#saveAlert {
+    visibility: hidden;
+}
+

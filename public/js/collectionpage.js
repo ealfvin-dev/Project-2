@@ -36,17 +36,17 @@ buildPage();
 
 function createArtworkDiv (data) {
     var artworkDiv = $("<div>");
-        artworkDiv.attr({"class": "card"}).css("width", "18rem");
+        artworkDiv.attr({"class": "card text-center"}).css("width", "40rem");
 
     var artworkImg = $("<img>");
         artworkImg.attr({"src": data.picture,
                          "class": "card-img-top",
                          "alt": "artwork"});
 
-    var artworkTitle = $("<p>");
+    var artworkTitle = $("<h4>");
         artworkTitle.text(data.title).attr({"class": "card-text"});
     
-    var artworkArtist = $("<p>");
+    var artworkArtist = $("<h4>");
         artworkArtist.text(data.artist).attr({"class": "card-text"});
 
     var artworkDate = $("<p>");

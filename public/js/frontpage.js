@@ -1,3 +1,4 @@
+$(document).ready(function() {
 const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects";
 
     let numIds;
@@ -43,6 +44,7 @@ const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects
             }
             getArt();
         });
+        $("#saveAlert").css({"visibility": "hidden"})
     };
 
     function getGallery () {
@@ -70,7 +72,9 @@ const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects
         var activeCheck = $("<input>");
             activeCheck.attr({"type": "checkbox",
                               "class": "activeCheck",
-                              "name": "checkbox"});
+                              "name": "checkbox",
+                              "onClick": activeName()
+                             });
 
             galleryOption.append(activeCheck);
         return galleryOption;
@@ -80,13 +84,14 @@ const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects
     let gallery;
    
 
-    $("input[name=checkbox]").change(function(){
+    function activeName (){
         console.log("listening")
-        if($(".activeCheck").is(":checked")){
+        if(this.checked === true){
             gallery = $("galleryOption").text();
+            
         }
         console.log(gallery);
-    });
+    };
     
     function saveName(event) {
         
@@ -125,6 +130,7 @@ const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects
                 console.log("added art piece to table");
                 
             })
+            $("#saveAlert").css({"visibility": "visible"})
             event.stopImmediatePropagation();
         }
 
@@ -132,5 +138,5 @@ const idsUrl = "https://collectionapi.metmuseum.org/public/collection/v1/objects
 
         $(document).on("click", "#addGallery", saveName);
         $(document).on('click', "#save",sendToCollection);
-
+    });
    
