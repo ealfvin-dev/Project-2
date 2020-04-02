@@ -1,13 +1,13 @@
 function getGallery () {
-        
     $.get("/api/gallery", renderGalleryList);
 }
 
 function renderGalleryList(data) {
      let rowsToAdd = [];
      for (let i = 0; i < data.length; i++){
-     rowsToAdd.push(createGalleryRow(data[i]));
+        rowsToAdd.push(createGalleryRow(data[i]));
      }
+
      $("#gallery-list").empty();
      $("#gallery-list").prepend(rowsToAdd);
      console.log("getting rows")
@@ -15,10 +15,10 @@ function renderGalleryList(data) {
 
 function createGalleryRow(data) {
     var galleryOption = $("<a>");
-            galleryOption.attr({"class": "btn list-group-item list-group-item-action",
-                                "type": "button",
-                                "href": `/collection?${data.name}`});
-            galleryOption.text(data.name);
+        galleryOption.attr({"class": "btn list-group-item list-group-item-action",
+                            "type": "button",
+                            "href": `/collection?${data.name}`});
+        galleryOption.text(data.name);
     return galleryOption;
 }
 getGallery();
