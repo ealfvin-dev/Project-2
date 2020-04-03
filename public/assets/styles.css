@@ -1,4 +1,6 @@
-body {
+body{
+    background-image: url("./so-white.png");
+    background-size: 100vh;
     font-family: 'IM Fell French Canon SC', serif;
 }
 
@@ -35,6 +37,7 @@ body {
 }
 
 #image {
+    background-color: white;
     padding: 25px;
     border-color: rgba(0, 0, 0, 0.767);
     border-style: solid;
