@@ -30,5 +30,8 @@
     display: grid;
     place-items: center;
 }
+body {
+    font-family: 'IM Fell French Canon SC', serif;
+}
 
 
