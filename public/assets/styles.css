@@ -1,3 +1,9 @@
+body{
+    background-image: url("./so-white.png");
+    background-size: 100vh;
+    font-family: 'IM Fell French Canon SC', serif;
+}
+
 .container-full {
     margin: 2%;
 }
@@ -29,9 +35,6 @@
 .col-lg-8 {
     display: grid;
     place-items: center;
-}
-body {
-    font-family: 'IM Fell French Canon SC', serif;
 }
 
 
