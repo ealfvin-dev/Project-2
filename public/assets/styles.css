@@ -1,7 +1,7 @@
 body{
     background-image: url("./so-white.png");
-    background-size: 100% 60%;
-    
+    background-size: 100vh;
+    font-family: 'IM Fell French Canon SC', serif;
 }
 
 .container-full {
@@ -35,9 +35,6 @@ body{
 .col-lg-8 {
     display: grid;
     place-items: center;
-}
-body {
-    font-family: 'IM Fell French Canon SC', serif;
 }
 
 
