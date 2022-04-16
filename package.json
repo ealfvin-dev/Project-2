@@ -25,7 +25,7 @@
   "homepage": "https://github.com/ealfvin-dev/Project-2#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "express-handlebars": "^4.0.0",
+    "express-handlebars": "^5.3.1",
     "mysql2": "^2.1.0",
     "sequelize": "^5.21.5"
   }
